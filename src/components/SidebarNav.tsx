@@ -30,7 +30,7 @@ const SidebarNav = () => {
   const navItems: NavItem[] = [
     { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
     { icon: Smartphone, label: 'SIM Swap Logs', href: '/sim-swap-logs' },
-    { icon: Flag, label: 'Report Scam', href: '#' },
+    { icon: Flag, label: 'Report Scam', href: '/report-scam' },
     { icon: Bell, label: 'Alerts', href: '#' },
     { icon: Settings, label: 'Settings', href: '#' },
   ];
