@@ -3,11 +3,12 @@ import React, { useState } from 'react';
 import { PageContainer } from '@/components/PageContainer';
 import { PageHeader } from '@/components/PageHeader';
 import AlertSummary from '@/components/AlertSummary';
-import AlertsTable from '@/components/AlertsTable';
+import AlertsTable from '@/components/alerts/AlertsTable';
 import AlertsQuickActions from '@/components/AlertsQuickActions';
 import AlertsMapView from '@/components/AlertsMapView';
 import { Bell, Filter } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AlertsTableFilters from '@/components/alerts/AlertsTableFilters';
 
 const Alerts = () => {
   const [filterStatus, setFilterStatus] = useState('all');
@@ -15,6 +16,12 @@ const Alerts = () => {
   const [filterDate, setFilterDate] = useState('all');
   const [sortBy, setSortBy] = useState('date-desc');
   const [viewMode, setViewMode] = useState('list');
+
+  const handleFilterChange = (filterType: 'status' | 'severity' | 'date', value: string) => {
+    if (filterType === 'status') setFilterStatus(value);
+    else if (filterType === 'severity') setFilterSeverity(value);
+    else if (filterType === 'date') setFilterDate(value);
+  };
 
   return (
     <PageContainer>
@@ -33,36 +40,12 @@ const Alerts = () => {
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-medium">Filter By:</span>
-            <select 
-              className="bg-secondary text-secondary-foreground text-sm rounded-md border border-border/50 px-2 py-1"
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-            >
-              <option value="all">All Status</option>
-              <option value="new">New</option>
-              <option value="acknowledged">Acknowledged</option>
-              <option value="resolved">Resolved</option>
-            </select>
-            <select 
-              className="bg-secondary text-secondary-foreground text-sm rounded-md border border-border/50 px-2 py-1"
-              value={filterSeverity}
-              onChange={(e) => setFilterSeverity(e.target.value)}
-            >
-              <option value="all">All Severity</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
-            <select 
-              className="bg-secondary text-secondary-foreground text-sm rounded-md border border-border/50 px-2 py-1"
-              value={filterDate}
-              onChange={(e) => setFilterDate(e.target.value)}
-            >
-              <option value="all">All Time</option>
-              <option value="today">Today</option>
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-            </select>
+            <AlertsTableFilters 
+              filterStatus={filterStatus}
+              filterSeverity={filterSeverity}
+              filterDate={filterDate}
+              onFilterChange={handleFilterChange}
+            />
           </div>
           
           <Tabs defaultValue="list" className="w-auto" onValueChange={setViewMode}>
