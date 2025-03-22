@@ -8,31 +8,31 @@ import { cn } from '@/lib/utils';
 const scamAlerts = [
   {
     id: '1',
-    location: 'New York, NY',
+    location: 'Nairobi',
     scamType: 'SIM Swap',
     threatLevel: 'high',
-    description: 'Multiple SIM swap attempts targeting T-Mobile customers',
+    description: 'Multiple SIM swap attempts targeting Safaricom customers',
     count: 12
   },
   {
     id: '2',
-    location: 'Los Angeles, CA',
+    location: 'Mombasa',
     scamType: 'Phishing',
     threatLevel: 'medium',
-    description: 'Phishing texts claiming to be from Verizon support',
+    description: 'Phishing texts claiming to be from Airtel support',
     count: 8
   },
   {
     id: '3',
-    location: 'Chicago, IL',
+    location: 'Kisumu',
     scamType: 'Fake Support',
     threatLevel: 'high',
-    description: 'Callers impersonating AT&T support staff',
+    description: 'Callers impersonating Telkom support staff',
     count: 10
   },
   {
     id: '4',
-    location: 'Miami, FL',
+    location: 'Eldoret',
     scamType: 'Identity Theft',
     threatLevel: 'low',
     description: 'Fraudulent account creation attempts using stolen IDs',
@@ -42,11 +42,11 @@ const scamAlerts = [
 
 // Most affected locations
 const affectedLocations = [
-  { location: 'New York, NY', count: 24 },
-  { location: 'Los Angeles, CA', count: 18 },
-  { location: 'Chicago, IL', count: 15 },
-  { location: 'Houston, TX', count: 12 },
-  { location: 'Miami, FL', count: 10 }
+  { location: 'Nairobi', count: 24 },
+  { location: 'Mombasa', count: 18 },
+  { location: 'Kisumu', count: 15 },
+  { location: 'Eldoret', count: 12 },
+  { location: 'Nakuru', count: 10 }
 ];
 
 const CommunityScamAlerts = () => {

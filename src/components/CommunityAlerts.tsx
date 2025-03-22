@@ -7,35 +7,35 @@ import { cn } from '@/lib/utils';
 const communityData = [
   {
     id: '1',
-    location: 'New York, NY',
+    location: 'Nairobi, Kenya',
     count: 12,
     trend: 'up',
-    description: 'Banking scam calls pretending to be from Chase Bank'
+    description: 'Banking scam calls pretending to be from local banks'
   },
   {
     id: '2',
-    location: 'Los Angeles, CA',
+    location: 'Mombasa, Kenya',
     count: 8,
     trend: 'up',
-    description: 'SIM swap attempts targeting T-Mobile customers'
+    description: 'SIM swap attempts targeting mobile network customers'
   },
   {
     id: '3',
-    location: 'Chicago, IL',
+    location: 'Kisumu, Kenya',
     count: 6,
     trend: 'down',
-    description: 'Phishing texts claiming to be from Amazon delivery'
+    description: 'Phishing texts claiming to be from online shopping platforms'
   },
   {
     id: '4',
-    location: 'Houston, TX',
+    location: 'Nakuru, Kenya',
     count: 5,
     trend: 'stable',
-    description: 'Vishing calls impersonating IRS officials'
+    description: 'Vishing calls impersonating government officials'
   },
   {
     id: '5',
-    location: 'Miami, FL',
+    location: 'Eldoret, Kenya',
     count: 4,
     trend: 'up',
     description: 'WhatsApp account takeover attempts'

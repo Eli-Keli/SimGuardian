@@ -64,7 +64,7 @@ const ReportScamForm = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="space-y-2">
           <Label htmlFor="phone">Phone Number</Label>
-          <Input id="phone" type="tel" placeholder="+1 (555) 123-4567" required />
+          <Input id="phone" type="tel" placeholder="+254 734 456789" required />
         </div>
         
         <div className="space-y-2">

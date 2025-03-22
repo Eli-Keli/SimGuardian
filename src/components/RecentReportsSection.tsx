@@ -8,7 +8,7 @@ import { Clock, Phone } from 'lucide-react';
 const recentReports = [
   {
     id: '1',
-    phoneNumber: '+1 (555) 123-4567',
+    phoneNumber: '+254 712 345678',
     scamType: 'SIM Swap',
     date: '2023-08-17T10:30:00',
     status: 'flagged',
@@ -16,7 +16,7 @@ const recentReports = [
   },
   {
     id: '2',
-    phoneNumber: '+1 (555) 987-6543',
+    phoneNumber: '+254 798 765432',
     scamType: 'Phishing',
     date: '2023-08-16T15:45:00',
     status: 'pending',
@@ -24,7 +24,7 @@ const recentReports = [
   },
   {
     id: '3',
-    phoneNumber: '+1 (555) 456-7890',
+    phoneNumber: '+254 723 456789',
     scamType: 'Fake Support Call',
     date: '2023-08-15T09:15:00',
     status: 'safe',

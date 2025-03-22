@@ -25,73 +25,73 @@ import {
 const logsData = [
   { 
     id: '1',
-    phoneNumber: '+1 (555) 123-4567',
+    phoneNumber: '+254 712 345678',
     date: '2023-09-15T14:30:00',
     status: 'flagged' as const,
-    location: 'New York, NY',
+    location: 'Nairobi, Kenya',
     deviceInfo: 'iPhone 13, iOS 16.5',
     ipAddress: '192.168.1.1',
-    carrier: 'Verizon'
+    carrier: 'Safaricom'
   },
   { 
     id: '2',
-    phoneNumber: '+1 (555) 987-6543',
+    phoneNumber: '+254 722 987654',
     date: '2023-09-14T13:15:00',
     status: 'safe' as const,
-    location: 'Miami, FL',
+    location: 'Mombasa, Kenya',
     deviceInfo: 'Samsung Galaxy S21, Android 13',
     ipAddress: '192.168.1.2',
-    carrier: 'AT&T'
+    carrier: 'Airtel'
   },
   { 
     id: '3',
-    phoneNumber: '+1 (555) 456-7890',
+    phoneNumber: '+254 733 456789',
     date: '2023-09-14T12:45:00',
     status: 'pending' as const,
-    location: 'Chicago, IL',
+    location: 'Kisumu, Kenya',
     deviceInfo: 'Google Pixel 6, Android 13',
     ipAddress: '192.168.1.3',
-    carrier: 'T-Mobile'
+    carrier: 'Telkom'
   },
   { 
     id: '4',
-    phoneNumber: '+1 (555) 789-0123',
+    phoneNumber: '+254 745 789012',
     date: '2023-09-13T11:20:00',
     status: 'safe' as const,
-    location: 'Los Angeles, CA',
+    location: 'Eldoret, Kenya',
     deviceInfo: 'iPhone 12, iOS 16.4',
     ipAddress: '192.168.1.4',
-    carrier: 'Sprint'
+    carrier: 'Safaricom'
   },
   { 
     id: '5',
-    phoneNumber: '+1 (555) 234-5678',
+    phoneNumber: '+254 710 234567',
     date: '2023-09-12T10:00:00',
     status: 'flagged' as const,
-    location: 'Dallas, TX',
+    location: 'Nakuru, Kenya',
     deviceInfo: 'OnePlus 9, OxygenOS 13',
     ipAddress: '192.168.1.5',
-    carrier: 'Verizon'
+    carrier: 'Airtel'
   },
   { 
     id: '6',
-    phoneNumber: '+1 (555) 345-6789',
+    phoneNumber: '+254 728 345678',
     date: '2023-09-11T09:30:00',
     status: 'safe' as const,
-    location: 'Seattle, WA',
+    location: 'Thika, Kenya',
     deviceInfo: 'Samsung Galaxy S22, Android 13',
     ipAddress: '192.168.1.6',
-    carrier: 'AT&T'
+    carrier: 'Telkom'
   },
   { 
     id: '7',
-    phoneNumber: '+1 (555) 456-7890',
+    phoneNumber: '+254 738 456789',
     date: '2023-09-10T08:45:00',
     status: 'pending' as const,
-    location: 'Boston, MA',
+    location: 'Naivasha, Kenya',
     deviceInfo: 'iPhone 14, iOS 16.5',
     ipAddress: '192.168.1.7',
-    carrier: 'T-Mobile'
+    carrier: 'Safaricom'
   },
 ];
 

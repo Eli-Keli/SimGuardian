@@ -31,7 +31,7 @@ const SidebarNav = () => {
     { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
     { icon: Smartphone, label: 'SIM Swap Logs', href: '/sim-swap-logs' },
     { icon: Flag, label: 'Report Scam', href: '/report-scam' },
-    { icon: Bell, label: 'Alerts', href: '#' },
+    { icon: Bell, label: 'Alerts', href: '/alerts' },
     { icon: Settings, label: 'Settings', href: '#' },
   ];
 
