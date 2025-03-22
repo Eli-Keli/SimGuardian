@@ -2,7 +2,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-type StatusType = 'safe' | 'flagged' | 'alert' | 'pending';
+type StatusType = 'safe' | 'flagged' | 'alert' | 'pending' | 'high' | 'medium' | 'low';
 
 interface StatusBadgeProps {
   status: StatusType;
@@ -36,6 +36,24 @@ const StatusBadge = ({ status, className, pulse = false }: StatusBadgeProps) => 
       label: 'Pending',
       borderColor: 'border-info/30',
     },
+    high: {
+      bg: 'bg-destructive/20',
+      text: 'text-destructive',
+      label: 'High',
+      borderColor: 'border-destructive/30',
+    },
+    medium: {
+      bg: 'bg-warning/20',
+      text: 'text-warning',
+      label: 'Medium',
+      borderColor: 'border-warning/30',
+    },
+    low: {
+      bg: 'bg-success/20',
+      text: 'text-success',
+      label: 'Low',
+      borderColor: 'border-success/30',
+    },
   };
 
   const config = statusConfig[status];
@@ -54,9 +72,9 @@ const StatusBadge = ({ status, className, pulse = false }: StatusBadgeProps) => 
       <span 
         className={cn(
           'w-1.5 h-1.5 rounded-full',
-          status === 'safe' ? 'bg-success' : 
-          status === 'flagged' ? 'bg-destructive' : 
-          status === 'alert' ? 'bg-warning' : 'bg-info'
+          status === 'safe' || status === 'low' ? 'bg-success' : 
+          status === 'flagged' || status === 'high' ? 'bg-destructive' : 
+          status === 'alert' || status === 'medium' ? 'bg-warning' : 'bg-info'
         )} 
       />
       {config.label}
