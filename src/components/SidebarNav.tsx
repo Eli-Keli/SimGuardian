@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
   LayoutDashboard, 
@@ -18,17 +19,17 @@ interface NavItem {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   href: string;
-  active?: boolean;
 }
 
 const SidebarNav = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const isMobile = useIsMobile();
+  const location = useLocation();
 
   const navItems: NavItem[] = [
-    { icon: LayoutDashboard, label: 'Dashboard', href: '#', active: true },
-    { icon: Smartphone, label: 'SIM Swap Logs', href: '#' },
+    { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
+    { icon: Smartphone, label: 'SIM Swap Logs', href: '/sim-swap-logs' },
     { icon: Flag, label: 'Report Scam', href: '#' },
     { icon: Bell, label: 'Alerts', href: '#' },
     { icon: Settings, label: 'Settings', href: '#' },
@@ -91,26 +92,29 @@ const SidebarNav = () => {
           {/* Nav items */}
           <nav className="mt-4 flex-1 px-3 overflow-y-auto">
             <ul className="space-y-1">
-              {navItems.map((item, index) => (
-                <li key={index}>
-                  <a
-                    href={item.href}
-                    className={cn(
-                      "sidebar-item",
-                      item.active && "sidebar-item-active",
-                      !item.active && "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
-                    )}
-                  >
-                    <item.icon className={cn(
-                      "h-5 w-5",
-                      item.active ? "text-primary" : "text-sidebar-foreground/70"
-                    )} />
-                    {(!collapsed || isMobile) && (
-                      <span>{item.label}</span>
-                    )}
-                  </a>
-                </li>
-              ))}
+              {navItems.map((item, index) => {
+                const isActive = location.pathname === item.href;
+                return (
+                  <li key={index}>
+                    <Link
+                      to={item.href}
+                      className={cn(
+                        "sidebar-item",
+                        isActive && "sidebar-item-active",
+                        !isActive && "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
+                      )}
+                    >
+                      <item.icon className={cn(
+                        "h-5 w-5",
+                        isActive ? "text-primary" : "text-sidebar-foreground/70"
+                      )} />
+                      {(!collapsed || isMobile) && (
+                        <span>{item.label}</span>
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
