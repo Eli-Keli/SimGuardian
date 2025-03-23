@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import SimSwapLogs from "./pages/SimSwapLogs";
 import ReportScam from "./pages/ReportScam";
 import Alerts from "./pages/Alerts";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/sim-swap-logs" element={<SimSwapLogs />} />
           <Route path="/report-scam" element={<ReportScam />} />
           <Route path="/alerts" element={<Alerts />} />
+          <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
