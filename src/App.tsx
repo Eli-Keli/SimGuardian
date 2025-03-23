@@ -10,6 +10,8 @@ import SimSwapLogs from "./pages/SimSwapLogs";
 import ReportScam from "./pages/ReportScam";
 import Alerts from "./pages/Alerts";
 import Settings from "./pages/Settings";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +22,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<Index />} />
           <Route path="/sim-swap-logs" element={<SimSwapLogs />} />
           <Route path="/report-scam" element={<ReportScam />} />
