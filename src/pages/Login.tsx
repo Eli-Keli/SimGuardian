@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -15,34 +15,32 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { signIn, loading, user } = useAuth();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      // For demo purposes only - in a real app, you'd validate against a backend
-      if (email === 'demo@simguardian.com' && password === 'password123') {
-        toast({
-          title: "Login successful",
-          description: "Welcome back to SimGuardian.",
-        });
-        navigate('/');
-      } else {
-        setError('Invalid email or password. Please try again.');
-      }
-      setIsLoading(false);
-    }, 1000);
+    try {
+      await signIn(email, password);
+    } catch (error: any) {
+      setError(error.message || 'Failed to sign in. Please check your credentials.');
+    }
   };
 
   return (
@@ -101,12 +99,12 @@ const Login = () => {
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email or Phone</Label>
+                <Label htmlFor="email">Email</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input 
                     id="email"
-                    type="text" 
+                    type="email" 
                     placeholder="you@example.com" 
                     className="pl-10"
                     value={email}
@@ -138,9 +136,9 @@ const Login = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing in..." : "Sign in"}
-              {!isLoading && <ArrowRight className="ml-2 h-4 w-4" />}
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Signing in..." : "Sign in"}
+              {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
             </Button>
 
             <div className="relative my-4">

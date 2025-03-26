@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
   LayoutDashboard, 
@@ -11,14 +11,17 @@ import {
   Menu, 
   X, 
   Shield,
-  LogOut
+  LogOut,
+  LogIn
 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface NavItem {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   href: string;
+  requiresAuth?: boolean;
 }
 
 const SidebarNav = () => {
@@ -26,13 +29,15 @@ const SidebarNav = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const isMobile = useIsMobile();
   const location = useLocation();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const navItems: NavItem[] = [
-    { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
-    { icon: Smartphone, label: 'SIM Swap Logs', href: '/sim-swap-logs' },
-    { icon: Flag, label: 'Report Scam', href: '/report-scam' },
-    { icon: Bell, label: 'Alerts', href: '/alerts' },
-    { icon: Settings, label: 'Settings', href: '/settings' },
+    { icon: LayoutDashboard, label: 'Dashboard', href: '/', requiresAuth: true },
+    { icon: Smartphone, label: 'SIM Swap Logs', href: '/sim-swap-logs', requiresAuth: true },
+    { icon: Flag, label: 'Report Scam', href: '/report-scam', requiresAuth: true },
+    { icon: Bell, label: 'Alerts', href: '/alerts', requiresAuth: true },
+    { icon: Settings, label: 'Settings', href: '/settings', requiresAuth: true },
   ];
 
   const toggleSidebar = () => {
@@ -42,6 +47,17 @@ const SidebarNav = () => {
       setCollapsed(!collapsed);
     }
   };
+
+  const handleLogout = async () => {
+    await signOut();
+  };
+
+  const handleLogin = () => {
+    navigate('/login');
+  };
+
+  // Filter nav items based on auth status
+  const filteredNavItems = navItems.filter(item => !item.requiresAuth || user);
 
   return (
     <>
@@ -92,7 +108,7 @@ const SidebarNav = () => {
           {/* Nav items */}
           <nav className="mt-4 flex-1 px-3 overflow-y-auto">
             <ul className="space-y-1">
-              {navItems.map((item, index) => {
+              {filteredNavItems.map((item, index) => {
                 const isActive = location.pathname === item.href;
                 return (
                   <li key={index}>
@@ -120,17 +136,31 @@ const SidebarNav = () => {
 
           {/* Footer */}
           <div className="mt-auto p-3 border-t border-sidebar-border">
-            <a
-              href="#"
-              className={cn(
-                "sidebar-item text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
-              )}
-            >
-              <LogOut className="h-5 w-5" />
-              {(!collapsed || isMobile) && (
-                <span>Sign Out</span>
-              )}
-            </a>
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className={cn(
+                  "sidebar-item w-full text-left text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
+                )}
+              >
+                <LogOut className="h-5 w-5" />
+                {(!collapsed || isMobile) && (
+                  <span>Sign Out</span>
+                )}
+              </button>
+            ) : (
+              <button
+                onClick={handleLogin}
+                className={cn(
+                  "sidebar-item w-full text-left text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
+                )}
+              >
+                <LogIn className="h-5 w-5" />
+                {(!collapsed || isMobile) && (
+                  <span>Sign In</span>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </aside>
