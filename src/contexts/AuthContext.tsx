@@ -10,7 +10,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, fullName: string) => Promise<void>;
+  signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null; success: boolean }>;
   signOut: () => Promise<void>;
 }
 
@@ -72,7 +72,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signUp = async (email: string, password: string, fullName: string) => {
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signUp({ 
+      
+      // First check if the user already exists
+      const { data: existingUsers } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('email', email)
+        .maybeSingle();
+
+      if (existingUsers) {
+        toast({
+          title: "Sign up failed",
+          description: "An account with this email already exists.",
+          variant: "destructive",
+        });
+        return { error: new Error("An account with this email already exists."), success: false };
+      }
+      
+      const { error, data } = await supabase.auth.signUp({ 
         email, 
         password,
         options: {
@@ -88,7 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           description: error.message,
           variant: "destructive",
         });
-        throw error;
+        return { error, success: false };
       }
       
       toast({
@@ -96,9 +113,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         description: "Welcome to SimGuardian! Please check your email for confirmation.",
       });
       
-      // Don't navigate away after signup as the user may need to verify their email
+      // Return success
+      return { error: null, success: true };
     } catch (error: any) {
       console.error('Error signing up:', error.message);
+      toast({
+        title: "Sign up failed",
+        description: error.message || "An unexpected error occurred.",
+        variant: "destructive",
+      });
+      return { error, success: false };
     } finally {
       setLoading(false);
     }

@@ -25,6 +25,7 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { signUp, loading, user } = useAuth();
@@ -39,16 +40,27 @@ const Signup = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsSubmitting(true);
     
     if (!agreedToTerms) {
       setError('You must agree to the terms of service to continue.');
+      setIsSubmitting(false);
       return;
     }
     
     try {
-      await signUp(email, password, fullName);
+      const { error, success } = await signUp(email, password, fullName);
+      
+      if (error) {
+        setError(error.message || 'Failed to create account. Please try again.');
+      } else if (success) {
+        // Optionally redirect or show additional information
+        // The toast is already shown in the AuthContext
+      }
     } catch (error: any) {
       setError(error.message || 'Failed to create account. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -119,6 +131,7 @@ const Signup = () => {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     required
+                    disabled={isSubmitting || loading}
                   />
                 </div>
               </div>
@@ -135,6 +148,7 @@ const Signup = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    disabled={isSubmitting || loading}
                   />
                 </div>
               </div>
@@ -151,10 +165,12 @@ const Signup = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    disabled={isSubmitting || loading}
+                    minLength={6}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Password must be at least 8 characters long
+                  Password must be at least 6 characters long
                 </p>
               </div>
 
@@ -167,6 +183,7 @@ const Signup = () => {
                       setAgreedToTerms(checked);
                     }
                   }}
+                  disabled={isSubmitting || loading}
                 />
                 <label
                   htmlFor="terms"
@@ -184,9 +201,13 @@ const Signup = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creating account..." : "Create account"}
-              {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={isSubmitting || loading}
+            >
+              {isSubmitting || loading ? "Creating account..." : "Create account"}
+              {!isSubmitting && !loading && <ArrowRight className="ml-2 h-4 w-4" />}
             </Button>
 
             <div className="relative my-4">
@@ -200,7 +221,7 @@ const Signup = () => {
               </div>
             </div>
 
-            <Button variant="outline" type="button" className="w-full">
+            <Button variant="outline" type="button" className="w-full" disabled={isSubmitting || loading}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="h-5 w-5 mr-2">
                 <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
                 <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
