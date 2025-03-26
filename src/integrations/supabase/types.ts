@@ -9,6 +9,83 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      device_status_logs: {
+        Row: {
+          created_at: string
+          device_id: string
+          id: string
+          new_status: string
+          previous_status: string
+          reason: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          device_id: string
+          id?: string
+          new_status: string
+          previous_status: string
+          reason?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          device_id?: string
+          id?: string
+          new_status?: string
+          previous_status?: string
+          reason?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_status_logs_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "devices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      devices: {
+        Row: {
+          carrier: string | null
+          device_model: string
+          id: string
+          nickname: string | null
+          notes: string | null
+          phone_number: string
+          registered_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          carrier?: string | null
+          device_model: string
+          id?: string
+          nickname?: string | null
+          notes?: string | null
+          phone_number: string
+          registered_at?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          carrier?: string | null
+          device_model?: string
+          id?: string
+          nickname?: string | null
+          notes?: string | null
+          phone_number?: string
+          registered_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

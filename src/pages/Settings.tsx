@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { PageContainer } from '@/components/PageContainer';
 import { PageHeader } from '@/components/PageHeader';
-import { Settings as SettingsIcon, UserCog } from 'lucide-react';
+import { Settings as SettingsIcon, UserCog, Smartphone } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AccountSecuritySection } from '@/components/settings/AccountSecuritySection';
 import { NotificationPreferencesSection } from '@/components/settings/NotificationPreferencesSection';
@@ -11,6 +11,7 @@ import { DataPrivacySection } from '@/components/settings/DataPrivacySection';
 import { AdvancedSettingsSection } from '@/components/settings/AdvancedSettingsSection';
 import { HelpSupportSection } from '@/components/settings/HelpSupportSection';
 import { ProfileManagementSection } from '@/components/settings/ProfileManagementSection';
+import { DeviceManagementSection } from '@/components/settings/DeviceManagementSection';
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState('profile');
@@ -30,8 +31,9 @@ const Settings = () => {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="w-full bg-secondary/50 p-1 grid grid-cols-3 md:grid-cols-7 gap-1">
+          <TabsList className="w-full bg-secondary/50 p-1 grid grid-cols-2 md:grid-cols-8 gap-1">
             <TabsTrigger value="profile">Profile</TabsTrigger>
+            <TabsTrigger value="devices">Devices</TabsTrigger>
             <TabsTrigger value="account-security">Security</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
             <TabsTrigger value="regional">Regional</TabsTrigger>
@@ -42,6 +44,10 @@ const Settings = () => {
 
           <TabsContent value="profile" className="space-y-6">
             <ProfileManagementSection />
+          </TabsContent>
+
+          <TabsContent value="devices" className="space-y-6">
+            <DeviceManagementSection />
           </TabsContent>
 
           <TabsContent value="account-security" className="space-y-6">
