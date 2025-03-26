@@ -73,21 +73,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setLoading(true);
       
-      // First check if the user already exists
-      const { data: existingUsers } = await supabase
-        .from('profiles')
-        .select('email')
-        .eq('email', email)
-        .maybeSingle();
-
-      if (existingUsers) {
-        toast({
-          title: "Sign up failed",
-          description: "An account with this email already exists.",
-          variant: "destructive",
-        });
-        return { error: new Error("An account with this email already exists."), success: false };
-      }
+      // We'll rely on Supabase's built-in user management and our SQL trigger
+      // for creating the profile, removing the direct check against the profiles table
       
       const { error, data } = await supabase.auth.signUp({ 
         email, 

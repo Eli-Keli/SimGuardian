@@ -18,6 +18,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 const Signup = () => {
   const [fullName, setFullName] = useState('');
@@ -26,6 +27,7 @@ const Signup = () => {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [debugInfo, setDebugInfo] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { signUp, loading, user } = useAuth();
@@ -40,6 +42,7 @@ const Signup = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setDebugInfo(null);
     setIsSubmitting(true);
     
     if (!agreedToTerms) {
@@ -47,17 +50,34 @@ const Signup = () => {
       setIsSubmitting(false);
       return;
     }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long.');
+      setIsSubmitting(false);
+      return;
+    }
     
     try {
+      console.log('Starting signup process for:', email);
       const { error, success } = await signUp(email, password, fullName);
       
       if (error) {
+        console.error('Signup error:', error.message);
         setError(error.message || 'Failed to create account. Please try again.');
+        
+        // Add more detailed error info for debugging
+        try {
+          // Add some debug info to help troubleshoot
+          setDebugInfo(`Service status: ${supabase.auth.getSession ? 'Available' : 'Unavailable'}`);
+        } catch (debugError) {
+          setDebugInfo('Error checking service status');
+        }
       } else if (success) {
         // Optionally redirect or show additional information
-        // The toast is already shown in the AuthContext
+        console.log('Signup successful');
       }
     } catch (error: any) {
+      console.error('Unexpected signup error:', error);
       setError(error.message || 'Failed to create account. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -113,6 +133,14 @@ const Signup = () => {
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
                 {error}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {debugInfo && (
+            <Alert className="animate-fade-in bg-muted/50">
+              <AlertDescription>
+                <p className="text-xs text-muted-foreground">Debug info: {debugInfo}</p>
               </AlertDescription>
             </Alert>
           )}
