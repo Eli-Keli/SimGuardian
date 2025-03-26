@@ -46,7 +46,7 @@ export const DeviceManagementSection = () => {
   const [currentDevice, setCurrentDevice] = useState<Device | null>(null);
   const [newStatus, setNewStatus] = useState<'active' | 'lost' | 'stolen' | 'suspended'>('active');
   const [statusReason, setStatusReason] = useState('');
-  
+
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -73,18 +73,18 @@ export const DeviceManagementSection = () => {
   // Fetch devices
   const fetchDevices = async () => {
     if (!user) return;
-    
+
     try {
       setIsLoading(true);
       const { data, error } = await supabase
         .from('devices')
         .select('*')
         .order('registered_at', { ascending: false });
-      
+
       if (error) {
         throw error;
       }
-      
+
       setDevices(data as Device[]);
     } catch (error: any) {
       toast({
@@ -104,7 +104,7 @@ export const DeviceManagementSection = () => {
   // Add device
   const onAddDevice = async (data: DeviceFormData) => {
     if (!user) return;
-    
+
     try {
       setIsLoading(true);
       const { error } = await supabase
@@ -117,16 +117,16 @@ export const DeviceManagementSection = () => {
           nickname: data.nickname || null,
           notes: data.notes || null,
         });
-      
+
       if (error) {
         throw error;
       }
-      
+
       toast({
         title: 'Device added',
         description: 'Your device has been successfully registered.',
       });
-      
+
       form.reset();
       setIsAddDialogOpen(false);
       fetchDevices();
@@ -144,7 +144,7 @@ export const DeviceManagementSection = () => {
   // Update device
   const onUpdateDevice = async (data: DeviceFormData) => {
     if (!user || !currentDevice) return;
-    
+
     try {
       setIsLoading(true);
       const { error } = await supabase
@@ -158,16 +158,16 @@ export const DeviceManagementSection = () => {
           updated_at: new Date().toISOString(),
         })
         .eq('id', currentDevice.id);
-      
+
       if (error) {
         throw error;
       }
-      
+
       toast({
         title: 'Device updated',
         description: 'Your device information has been updated successfully.',
       });
-      
+
       setIsEditDialogOpen(false);
       fetchDevices();
     } catch (error: any) {
@@ -184,27 +184,27 @@ export const DeviceManagementSection = () => {
   // Delete device
   const onDeleteDevice = async (deviceId: string) => {
     if (!user) return;
-    
+
     if (!confirm('Are you sure you want to delete this device? This action cannot be undone.')) {
       return;
     }
-    
+
     try {
       setIsLoading(true);
       const { error } = await supabase
         .from('devices')
         .delete()
         .eq('id', deviceId);
-      
+
       if (error) {
         throw error;
       }
-      
+
       toast({
         title: 'Device deleted',
         description: 'The device has been removed from your account.',
       });
-      
+
       fetchDevices();
     } catch (error: any) {
       toast({
@@ -220,10 +220,10 @@ export const DeviceManagementSection = () => {
   // Update device status
   const onUpdateStatus = async () => {
     if (!user || !currentDevice) return;
-    
+
     try {
       setIsLoading(true);
-      
+
       // First log the status change
       const { error: logError } = await supabase
         .from('device_status_logs')
@@ -234,11 +234,11 @@ export const DeviceManagementSection = () => {
           new_status: newStatus,
           reason: statusReason,
         });
-      
+
       if (logError) {
         throw logError;
       }
-      
+
       // Then update the device status
       const { error: updateError } = await supabase
         .from('devices')
@@ -247,16 +247,16 @@ export const DeviceManagementSection = () => {
           updated_at: new Date().toISOString(),
         })
         .eq('id', currentDevice.id);
-      
+
       if (updateError) {
         throw updateError;
       }
-      
+
       toast({
         title: 'Status updated',
         description: `Device status changed to ${newStatus}.`,
       });
-      
+
       setIsStatusDialogOpen(false);
       setStatusReason('');
       fetchDevices();
@@ -321,7 +321,7 @@ export const DeviceManagementSection = () => {
         <CardContent>
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-medium">Your Registered Devices</h3>
-            <Button 
+            <Button
               onClick={() => {
                 form.reset();
                 setIsAddDialogOpen(true);
@@ -337,7 +337,7 @@ export const DeviceManagementSection = () => {
               <Smartphone className="mx-auto h-10 w-10 text-muted-foreground mb-2" />
               <h3 className="text-lg font-medium">No devices registered</h3>
               <p className="text-muted-foreground mb-4">Register your devices to better protect them</p>
-              <Button 
+              <Button
                 onClick={() => {
                   form.reset();
                   setIsAddDialogOpen(true);
@@ -427,7 +427,7 @@ export const DeviceManagementSection = () => {
               Add your SIM card or device details for better security monitoring.
             </DialogDescription>
           </DialogHeader>
-          
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onAddDevice)} className="space-y-4">
               <FormField
@@ -468,7 +468,7 @@ export const DeviceManagementSection = () => {
                   <FormItem>
                     <FormLabel>Network Carrier</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. Verizon, AT&T, T-Mobile" {...field} />
+                      <Input placeholder="e.g. Safaricom, Airtel, Telkom" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -536,7 +536,7 @@ export const DeviceManagementSection = () => {
               Update the information for your registered device.
             </DialogDescription>
           </DialogHeader>
-          
+
           <Form {...editForm}>
             <form onSubmit={editForm.handleSubmit(onUpdateDevice)} className="space-y-4">
               <FormField
@@ -574,7 +574,7 @@ export const DeviceManagementSection = () => {
                   <FormItem>
                     <FormLabel>Network Carrier</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. Verizon, AT&T, T-Mobile" {...field} />
+                      <Input placeholder="e.g. Safaricom, Airtel, Telkom" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -639,13 +639,13 @@ export const DeviceManagementSection = () => {
               Update the status of your device.
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="py-4 space-y-4">
             <div>
               <h4 className="font-medium mb-2">Current Status:</h4>
               <StatusBadge status={currentDevice ? getStatusBadgeType(currentDevice.status) : 'pending'} />
             </div>
-            
+
             <div>
               <h4 className="font-medium mb-2">New Status:</h4>
               <div className="flex flex-wrap gap-2">
@@ -683,7 +683,7 @@ export const DeviceManagementSection = () => {
                 </Button>
               </div>
             </div>
-            
+
             <div>
               <h4 className="font-medium mb-2">Reason for change (optional):</h4>
               <Textarea
@@ -703,8 +703,8 @@ export const DeviceManagementSection = () => {
             >
               Cancel
             </Button>
-            <Button 
-              onClick={onUpdateStatus} 
+            <Button
+              onClick={onUpdateStatus}
               disabled={isLoading}
               variant={newStatus === 'stolen' || newStatus === 'lost' ? 'destructive' : 'default'}
             >
