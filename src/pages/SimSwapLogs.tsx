@@ -108,11 +108,13 @@ const SimSwapLogs = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Locations</SelectItem>
-                    <SelectItem value="newyork">New York</SelectItem>
-                    <SelectItem value="losangeles">Los Angeles</SelectItem>
-                    <SelectItem value="chicago">Chicago</SelectItem>
-                    <SelectItem value="miami">Miami</SelectItem>
-                    <SelectItem value="dallas">Dallas</SelectItem>
+                    <SelectItem value="nairobi">Nairobi</SelectItem>
+                    <SelectItem value="mombasa">Mombasa</SelectItem>
+                    <SelectItem value="kisumu">Kisumu</SelectItem>
+                    <SelectItem value="nakuru">Nakuru</SelectItem>
+                    <SelectItem value="naivasha">Naivasha</SelectItem>
+                    <SelectItem value="eldoret">Eldoret</SelectItem>
+                    <SelectItem value="thika">Thika</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
