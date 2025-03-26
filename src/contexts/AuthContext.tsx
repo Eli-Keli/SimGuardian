@@ -4,14 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Session, User } from '@supabase/supabase-js';
 import { useToast } from '@/hooks/use-toast';
+import { Profile } from '@/types/supabase';
 
 interface AuthContextType {
   session: Session | null;
   user: User | null;
+  profile: Profile | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null; success: boolean }>;
   signOut: () => Promise<void>;
+  updateProfile: (updates: Partial<Profile>) => Promise<{ error: Error | null; success: boolean }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,9 +22,30 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Fetch user profile data
+  const fetchProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      
+      if (error) {
+        console.error('Error fetching profile:', error);
+        return;
+      }
+      
+      setProfile(data as Profile);
+    } catch (error: any) {
+      console.error('Error in fetchProfile:', error.message);
+    }
+  };
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -30,6 +54,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.log('Auth state change:', event);
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
+        
+        // Fetch profile when user changes
+        if (currentSession?.user) {
+          fetchProfile(currentSession.user.id);
+        } else {
+          setProfile(null);
+        }
       }
     );
 
@@ -37,6 +68,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
+      
+      // Fetch profile if user exists
+      if (currentSession?.user) {
+        fetchProfile(currentSession.user.id);
+      }
+      
       setLoading(false);
     });
 
@@ -72,9 +109,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signUp = async (email: string, password: string, fullName: string) => {
     try {
       setLoading(true);
-      
-      // We'll rely on Supabase's built-in user management and our SQL trigger
-      // for creating the profile, removing the direct check against the profiles table
       
       const { error, data } = await supabase.auth.signUp({ 
         email, 
@@ -115,6 +149,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updateProfile = async (updates: Partial<Profile>) => {
+    try {
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      setLoading(true);
+      
+      const { error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', user.id);
+      
+      if (error) {
+        toast({
+          title: "Profile update failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        return { error, success: false };
+      }
+      
+      // Update local profile state
+      if (profile) {
+        setProfile({ ...profile, ...updates });
+      }
+      
+      toast({
+        title: "Profile updated",
+        description: "Your profile has been updated successfully.",
+      });
+      
+      return { error: null, success: true };
+    } catch (error: any) {
+      console.error('Error updating profile:', error.message);
+      toast({
+        title: "Profile update failed",
+        description: error.message || "An unexpected error occurred.",
+        variant: "destructive",
+      });
+      return { error, success: false };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const signOut = async () => {
     try {
       setLoading(true);
@@ -137,7 +217,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ session, user, loading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ 
+      session, 
+      user, 
+      profile, 
+      loading, 
+      signIn, 
+      signUp, 
+      signOut, 
+      updateProfile 
+    }}>
       {children}
     </AuthContext.Provider>
   );
