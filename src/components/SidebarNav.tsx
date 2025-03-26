@@ -12,7 +12,8 @@ import {
   X, 
   Shield,
   LogOut,
-  LogIn
+  LogIn,
+  UserCog
 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useAuth } from '@/contexts/AuthContext';
@@ -29,7 +30,7 @@ const SidebarNav = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const isMobile = useIsMobile();
   const location = useLocation();
-  const { user, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
 
   const navItems: NavItem[] = [
@@ -104,6 +105,42 @@ const SidebarNav = () => {
               <span className="font-semibold text-lg">SimGuardian</span>
             )}
           </div>
+
+          {/* User profile section (new) */}
+          {user && (
+            <div className={cn(
+              "px-4 py-3 border-b border-sidebar-border",
+              collapsed && !isMobile && "flex justify-center"
+            )}>
+              {(!collapsed || isMobile) ? (
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0 h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                    {profile?.full_name ? profile.full_name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium truncate">
+                      {profile?.full_name || 'User'}
+                    </span>
+                    <Link 
+                      to="/settings" 
+                      onClick={() => isMobile && setMobileOpen(false)}
+                      className="text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground"
+                    >
+                      View profile
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <Link 
+                  to="/settings" 
+                  className="flex items-center justify-center h-8 w-8 rounded-full bg-primary/20 text-primary"
+                  title="View profile"
+                >
+                  <UserCog size={16} />
+                </Link>
+              )}
+            </div>
+          )}
 
           {/* Nav items */}
           <nav className="mt-4 flex-1 px-3 overflow-y-auto">
