@@ -1,134 +1,122 @@
 
 import React from 'react';
-import {
-  HomeIcon,
-  LayoutListIcon,
-  AlertOctagonIcon,
-  AlertTriangleIcon,
-  SettingsIcon,
-  Bell as BellIcon,
-  LogOut,
-  Menu,
-} from 'lucide-react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
+import { useNotifications } from '@/contexts/NotificationsContext';
+import { Sidebar, SidebarTrigger, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarHeader, SidebarFooter, SidebarGroup, SidebarGroupLabel } from './ui/sidebar';
 import { useAuth } from '@/contexts/AuthContext';
-import { cn } from '@/lib/utils';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
-import { Button } from './ui/button';
-import { useSidebar } from './ui/sidebar';
+import { Button } from '@/components/ui/button';
+import { 
+  Home, 
+  ShieldAlert, 
+  AlertTriangle, 
+  BellRing, 
+  Settings, 
+  LogOut, 
+  Phone, 
+  Activity,
+  ClipboardList,
+  Layers
+} from 'lucide-react';
 
 const SidebarNav = () => {
-  const { user, signOut } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
-  const { state, toggleSidebar } = useSidebar();
-  const isExpanded = state === 'expanded';
+  const { unreadCount } = useNotifications();
+  const { user, signOut } = useAuth();
 
-  const navItems = [
+  const isActive = (path: string) => location.pathname === path;
+
+  const menuItems = [
     {
+      icon: <Activity className="h-5 w-5" />,
       label: 'Dashboard',
-      icon: <HomeIcon className="h-5 w-5" />,
-      href: '/',
+      path: '/',
+      active: isActive('/')
     },
     {
+      icon: <Layers className="h-5 w-5" />,
+      label: 'Overview',
+      path: '/home',
+      active: isActive('/home')
+    },
+    {
+      icon: <Phone className="h-5 w-5" />,
       label: 'SIM Swap Logs',
-      icon: <LayoutListIcon className="h-5 w-5" />,
-      href: '/sim-swap-logs',
+      path: '/sim-swap-logs',
+      active: isActive('/sim-swap-logs')
     },
     {
+      icon: <ShieldAlert className="h-5 w-5" />,
       label: 'Report Scam',
-      icon: <AlertOctagonIcon className="h-5 w-5" />,
-      href: '/report-scam',
+      path: '/report-scam',
+      active: isActive('/report-scam')
     },
     {
+      icon: <AlertTriangle className="h-5 w-5" />,
       label: 'Alerts',
-      icon: <AlertTriangleIcon className="h-5 w-5" />,
-      href: '/alerts',
+      path: '/alerts',
+      active: isActive('/alerts'),
+      badge: <Badge variant="outline" className="ml-auto bg-destructive/10 text-destructive hover:bg-destructive/20">2</Badge>
     },
     {
+      icon: <ClipboardList className="h-5 w-5" />,
+      label: 'Activity Logs',
+      path: '/activity-logs',
+      active: isActive('/activity-logs')
+    },
+    {
+      icon: <BellRing className="h-5 w-5" />,
       label: 'Notifications',
-      icon: <BellIcon className="h-5 w-5" />,
-      href: '/notifications',
+      path: '/notifications',
+      active: isActive('/notifications'),
+      badge: unreadCount ? <Badge variant="outline" className="ml-auto bg-primary/10 text-primary hover:bg-primary/20">{unreadCount}</Badge> : null
     },
     {
+      icon: <Settings className="h-5 w-5" />,
       label: 'Settings',
-      icon: <SettingsIcon className="h-5 w-5" />,
-      href: '/settings',
-    },
+      path: '/settings',
+      active: isActive('/settings')
+    }
   ];
 
-  const handleLogout = async () => {
-    await signOut();
-    navigate('/login');
-  };
-
-  const sidebarWidth = isExpanded ? 'w-64' : 'w-16';
-
   return (
-    <div 
-      className={`fixed top-0 left-0 h-full ${sidebarWidth} flex flex-col bg-secondary border-r border-r-border z-50 transition-all duration-300`}
-    >
-      {/* Logo and Toggle Button */}
-      <div className="flex items-center justify-between h-16 px-4">
-        <span className={cn("font-bold text-xl", !isExpanded && "sr-only")}>SG</span>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          onClick={toggleSidebar} 
-          className="h-8 w-8"
-        >
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Toggle Sidebar</span>
-        </Button>
-      </div>
-
-      {/* Navigation Links */}
-      <nav className="flex-1 flex flex-col py-4">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.label}
-            to={item.href}
-            className={({ isActive }) =>
-              cn(
-                "group flex items-center py-3 px-4 hover:bg-muted rounded-md transition-colors",
-                isActive ? "bg-muted" : "text-muted-foreground",
-                !isExpanded && "justify-center px-0"
-              )
-            }
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="flex justify-end pr-2 pt-2">
+        <SidebarTrigger />
+      </SidebarHeader>
+      
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarMenu>
+            {menuItems.map((item) => (
+              <SidebarMenuItem key={item.path}>
+                <SidebarMenuButton asChild isActive={item.active} tooltip={item.label}>
+                  <Link to={item.path} className="flex w-full items-center">
+                    {item.icon}
+                    <span>{item.label}</span>
+                    {item.badge}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+      
+      <SidebarFooter className="mt-auto pb-4">
+        {user && (
+          <Button 
+            variant="ghost" 
+            className="w-full justify-start px-2" 
+            onClick={signOut}
           >
-            {item.icon}
-            {isExpanded && <span className="ml-3">{item.label}</span>}
-            <span className={cn("sr-only", isExpanded && "sr-only")}>{item.label}</span>
-          </NavLink>
-        ))}
-      </nav>
-
-      {/* User Dropdown */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button className={cn(
-            "group flex items-center h-16 hover:bg-muted rounded-md transition-colors px-4",
-            !isExpanded && "justify-center px-0"
-          )}>
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.image || ""} alt={user?.name || "User Avatar"} />
-              <AvatarFallback>{user?.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
-            </Avatar>
-            {isExpanded && <span className="ml-3">{user?.name || "User"}</span>}
-            <span className="sr-only">User Menu</span>
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuItem disabled>{user?.name || "User"}</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout}>
-            <LogOut className="h-4 w-4 mr-2" />
-            <span>Logout</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+            <LogOut className="mr-2 h-5 w-5" />
+            <span>Sign out</span>
+          </Button>
+        )}
+      </SidebarFooter>
+    </Sidebar>
   );
 };
 
