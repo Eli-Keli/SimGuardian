@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   HomeIcon,
@@ -7,17 +8,22 @@ import {
   SettingsIcon,
   Bell as BellIcon,
   LogOut,
+  Menu,
 } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { Button } from './ui/button';
+import { useSidebar } from './ui/sidebar';
 
 const SidebarNav = () => {
-  const { user, logout } = useAuth();
+  const { user, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const { state, toggleSidebar } = useSidebar();
+  const isExpanded = state === 'expanded';
 
   const navItems = [
     {
@@ -53,15 +59,28 @@ const SidebarNav = () => {
   ];
 
   const handleLogout = async () => {
-    await logout();
+    await signOut();
     navigate('/login');
   };
 
+  const sidebarWidth = isExpanded ? 'w-64' : 'w-16';
+
   return (
-    <div className="fixed top-0 left-0 h-full w-16 flex flex-col bg-secondary border-r border-r-border z-50">
-      {/* Logo */}
-      <div className="flex items-center justify-center h-16">
-        <span className="font-bold text-xl">SG</span>
+    <div 
+      className={`fixed top-0 left-0 h-full ${sidebarWidth} flex flex-col bg-secondary border-r border-r-border z-50 transition-all duration-300`}
+    >
+      {/* Logo and Toggle Button */}
+      <div className="flex items-center justify-between h-16 px-4">
+        <span className={cn("font-bold text-xl", !isExpanded && "sr-only")}>SG</span>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={toggleSidebar} 
+          className="h-8 w-8"
+        >
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle Sidebar</span>
+        </Button>
       </div>
 
       {/* Navigation Links */}
@@ -72,13 +91,15 @@ const SidebarNav = () => {
             to={item.href}
             className={({ isActive }) =>
               cn(
-                "group flex items-center justify-center py-3 hover:bg-muted rounded-md transition-colors",
-                isActive ? "bg-muted" : "text-muted-foreground"
+                "group flex items-center py-3 px-4 hover:bg-muted rounded-md transition-colors",
+                isActive ? "bg-muted" : "text-muted-foreground",
+                !isExpanded && "justify-center px-0"
               )
             }
           >
             {item.icon}
-            <span className="sr-only">{item.label}</span>
+            {isExpanded && <span className="ml-3">{item.label}</span>}
+            <span className={cn("sr-only", isExpanded && "sr-only")}>{item.label}</span>
           </NavLink>
         ))}
       </nav>
@@ -86,16 +107,20 @@ const SidebarNav = () => {
       {/* User Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="group flex items-center justify-center h-16 hover:bg-muted rounded-md transition-colors">
+          <button className={cn(
+            "group flex items-center h-16 hover:bg-muted rounded-md transition-colors px-4",
+            !isExpanded && "justify-center px-0"
+          )}>
             <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.avatar_url || ""} alt={user?.full_name || "User Avatar"} />
-              <AvatarFallback>{user?.full_name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
+              <AvatarImage src={user?.image || ""} alt={user?.name || "User Avatar"} />
+              <AvatarFallback>{user?.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
             </Avatar>
+            {isExpanded && <span className="ml-3">{user?.name || "User"}</span>}
             <span className="sr-only">User Menu</span>
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuItem disabled>{user?.full_name || "User"}</DropdownMenuItem>
+          <DropdownMenuItem disabled>{user?.name || "User"}</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="h-4 w-4 mr-2" />
