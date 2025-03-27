@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -57,7 +56,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         
         // Fetch profile when user changes
         if (currentSession?.user) {
-          fetchProfile(currentSession.user.id);
+          // Use setTimeout to avoid potential deadlock with auth state changes
+          setTimeout(() => {
+            fetchProfile(currentSession.user.id);
+          }, 0);
         } else {
           setProfile(null);
         }
@@ -86,6 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       
       if (error) {
+        console.error('Login error:', error.message);
         toast({
           title: "Login failed",
           description: error.message,
@@ -101,6 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       navigate('/');
     } catch (error: any) {
       console.error('Error signing in:', error.message);
+      // We already displayed the error toast above
     } finally {
       setLoading(false);
     }
