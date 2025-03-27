@@ -71,4 +71,34 @@ export const alertsData = [
     status: 'new' as const,
     description: 'Multiple failed password reset attempts'
   },
+  { 
+    id: '8',
+    phoneNumber: '+254 755 123456',
+    timestamp: '2023-09-09T16:30:00',
+    location: 'Machakos, Kenya',
+    threatLevel: 'high' as const,
+    type: 'SIM Swap Detected',
+    status: 'new' as const,
+    description: 'SIM swap detected and blocked automatically'
+  },
+  { 
+    id: '9',
+    phoneNumber: '+254 726 987654',
+    timestamp: '2023-09-08T14:15:00',
+    location: 'Nairobi, Kenya',
+    threatLevel: 'medium' as const,
+    type: 'Unusual Activity',
+    status: 'acknowledged' as const,
+    description: 'Multiple international calls to premium numbers detected'
+  },
+  { 
+    id: '10',
+    phoneNumber: '+254 737 456123',
+    timestamp: '2023-09-07T11:40:00',
+    location: 'Kisumu, Kenya',
+    threatLevel: 'low' as const,
+    type: 'Routine Check',
+    status: 'resolved' as const,
+    description: 'Completed routine security scan with no issues found'
+  }
 ];

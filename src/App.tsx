@@ -9,10 +9,12 @@ import NotFound from "./pages/NotFound";
 import SimSwapLogs from "./pages/SimSwapLogs";
 import ReportScam from "./pages/ReportScam";
 import Alerts from "./pages/Alerts";
+import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { NotificationsProvider } from "./contexts/NotificationsContext";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +42,7 @@ const AppRoutes = () => (
     <Route path="/sim-swap-logs" element={<ProtectedRoute><SimSwapLogs /></ProtectedRoute>} />
     <Route path="/report-scam" element={<ProtectedRoute><ReportScam /></ProtectedRoute>} />
     <Route path="/alerts" element={<ProtectedRoute><Alerts /></ProtectedRoute>} />
+    <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
     <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
     <Route path="*" element={<NotFound />} />
@@ -53,7 +56,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AppRoutes />
+          <NotificationsProvider>
+            <AppRoutes />
+          </NotificationsProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
