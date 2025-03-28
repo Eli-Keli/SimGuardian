@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React from 'react';
 import DashboardCard from './DashboardCard';
@@ -10,7 +11,7 @@ const recentReports = [
     id: '1',
     phoneNumber: '+254 712 345678',
     scamType: 'SIM Swap',
-    date: '2023-08-17T10:30:00',
+    date: '2025-21-17T10:30:00',
     status: 'flagged',
     description: 'Someone called pretending to be from my carrier and asked for my account PIN.'
   },
@@ -18,7 +19,7 @@ const recentReports = [
     id: '2',
     phoneNumber: '+254 798 765432',
     scamType: 'Phishing',
-    date: '2023-08-16T15:45:00',
+    date: '2025-23-16T15:45:00',
     status: 'pending',
     description: 'Received a text message with a link claiming my account was locked.'
   },
@@ -26,7 +27,7 @@ const recentReports = [
     id: '3',
     phoneNumber: '+254 723 456789',
     scamType: 'Fake Support Call',
-    date: '2023-08-15T09:15:00',
+    date: '2025-25-15T09:15:00',
     status: 'safe',
     description: 'Caller claimed to be tech support and asked for remote access to my device.'
   }

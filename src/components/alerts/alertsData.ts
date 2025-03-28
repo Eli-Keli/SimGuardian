@@ -4,7 +4,7 @@ export const alertsData = [
   { 
     id: '1',
     phoneNumber: '+254 712 345678',
-    timestamp: '2023-09-15T14:30:00',
+    timestamp: '2025-03-27T14:30:00',
     location: 'Nairobi, Kenya',
     threatLevel: 'high' as const,
     type: 'SIM Swap Attempt',
@@ -14,7 +14,7 @@ export const alertsData = [
   { 
     id: '2',
     phoneNumber: '+254 722 987654',
-    timestamp: '2023-09-15T13:15:00',
+    timestamp: '2025-03-26T13:15:00',
     location: 'Mombasa, Kenya',
     threatLevel: 'medium' as const,
     type: 'Phishing Alert',
@@ -24,7 +24,7 @@ export const alertsData = [
   { 
     id: '3',
     phoneNumber: '+254 733 456789',
-    timestamp: '2023-09-14T12:45:00',
+    timestamp: '2025-03-26T12:45:00',
     location: 'Kisumu, Kenya',
     threatLevel: 'low' as const,
     type: 'Security Notification',
@@ -34,7 +34,7 @@ export const alertsData = [
   { 
     id: '4',
     phoneNumber: '+254 745 789012',
-    timestamp: '2023-09-14T11:20:00',
+    timestamp: '2025-03-26T11:20:00',
     location: 'Eldoret, Kenya',
     threatLevel: 'high' as const,
     type: 'SIM Swap Attempt',
@@ -44,7 +44,7 @@ export const alertsData = [
   { 
     id: '5',
     phoneNumber: '+254 710 234567',
-    timestamp: '2023-09-13T10:00:00',
+    timestamp: '2025-03-26T10:00:00',
     location: 'Nakuru, Kenya',
     threatLevel: 'medium' as const,
     type: 'Suspicious Call',
@@ -54,7 +54,7 @@ export const alertsData = [
   { 
     id: '6',
     phoneNumber: '+254 728 345678',
-    timestamp: '2023-09-12T09:30:00',
+    timestamp: '2025-03-24T03:30:00',
     location: 'Thika, Kenya',
     threatLevel: 'low' as const,
     type: 'PIN Change',
@@ -64,7 +64,7 @@ export const alertsData = [
   { 
     id: '7',
     phoneNumber: '+254 738 654789',
-    timestamp: '2023-09-10T08:45:00',
+    timestamp: '2025-03-20T08:45:00',
     location: 'Naivasha, Kenya',
     threatLevel: 'high' as const,
     type: 'Account Takeover Attempt',
@@ -74,7 +74,7 @@ export const alertsData = [
   { 
     id: '8',
     phoneNumber: '+254 755 123456',
-    timestamp: '2023-09-09T16:30:00',
+    timestamp: '2025-03-03T16:30:00',
     location: 'Machakos, Kenya',
     threatLevel: 'high' as const,
     type: 'SIM Swap Detected',
@@ -84,7 +84,7 @@ export const alertsData = [
   { 
     id: '9',
     phoneNumber: '+254 726 987654',
-    timestamp: '2023-09-08T14:15:00',
+    timestamp: '2025-03-08T14:15:00',
     location: 'Nairobi, Kenya',
     threatLevel: 'medium' as const,
     type: 'Unusual Activity',
@@ -94,7 +94,7 @@ export const alertsData = [
   { 
     id: '10',
     phoneNumber: '+254 737 456123',
-    timestamp: '2023-09-07T11:40:00',
+    timestamp: '2025-03-07T11:40:00',
     location: 'Kisumu, Kenya',
     threatLevel: 'low' as const,
     type: 'Routine Check',

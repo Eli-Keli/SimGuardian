@@ -9,35 +9,35 @@ const fraudAlertsData = [
   { 
     id: '1',
     phoneNumber: '+254 712 345678',
-    date: '2023-08-15T14:30:00',
+    date: '2025-08-15T14:30:00',
     status: 'safe' as const,
     location: 'Nairobi, Kenya'
   },
   { 
     id: '2',
     phoneNumber: '+254 723 987654',
-    date: '2023-08-15T13:15:00',
+    date: '2025-08-15T13:15:00',
     status: 'flagged' as const,
     location: 'Mombasa, Kenya'
   },
   { 
     id: '3',
     phoneNumber: '+254 734 456789',
-    date: '2023-08-15T12:45:00',
+    date: '2025-08-15T12:45:00',
     status: 'pending' as const,
     location: 'Kisumu, Kenya'
   },
   { 
     id: '4',
     phoneNumber: '+254 745 789012',
-    date: '2023-08-15T11:20:00',
+    date: '2025-08-15T11:20:00',
     status: 'flagged' as const,
     location: 'Nakuru, Kenya'
   },
   { 
     id: '5',
     phoneNumber: '+254 756 234567',
-    date: '2023-08-15T10:00:00',
+    date: '2025-08-15T10:00:00',
     status: 'safe' as const,
     location: 'Eldoret, Kenya'
   },
