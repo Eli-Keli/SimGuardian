@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,7 +10,8 @@ import {
   Mail, 
   ArrowRight, 
   AlertCircle,
-  Check
+  Check,
+  Phone
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,10 +21,12 @@ import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { sendSMS } from '../utils/sendSMS';
 
 const Signup = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [error, setError] = useState('');
@@ -38,6 +42,22 @@ const Signup = () => {
       navigate('/');
     }
   }, [user, navigate]);
+
+  // Test SMS sending
+  // useEffect(() => {
+  //   const testSMS = async () => {
+  //     const message = `Welcome to SimGuardian! Your account has been created successfully. Start protecting your mobile identity today.`;
+  //     const smsResponse = await sendSMS('+254742560540', message);
+
+  //     if (smsResponse?.success) {
+  //       console.log('Welcome SMS sent successfully');
+  //     } else {
+  //       console.error('Failed to send welcome SMS:', smsResponse);
+  //     }
+  //   };
+
+  //   testSMS();
+  // }, []);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,6 +80,18 @@ const Signup = () => {
     try {
       console.log('Starting signup process for:', email);
       const { error, success } = await signUp(email, password, fullName);
+
+      // Send Welcome SMS
+      if (success) {
+        const message = `Hey ${fullName}, welcome to SimGuardian! Your account is now active, and you're officially in control of your mobile security. Stay protected, stay alert, and take charge of your SIM safety today!`;
+        const smsResponse = await sendSMS(phone, message);
+
+        if (smsResponse?.success) {
+          console.log('Welcome SMS sent successfully');
+        } else {
+          console.error('Failed to send welcome SMS:', smsResponse);
+        }
+      }
       
       if (error) {
         console.error('Signup error:', error.message);
@@ -175,6 +207,23 @@ const Signup = () => {
                     className="pl-10"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
+                    disabled={isSubmitting || loading}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input 
+                    id="phone"
+                    type="phone" 
+                    placeholder="+254 700 123 456" 
+                    className="pl-10"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     required
                     disabled={isSubmitting || loading}
                   />
