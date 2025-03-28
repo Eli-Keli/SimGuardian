@@ -11,6 +11,7 @@ import { ActivityChart } from '@/components/dashboard/ActivityChart';
 import { RecentActivityList } from '@/components/dashboard/RecentActivityList';
 import { useAuth } from '@/contexts/AuthContext';
 import { formatDistanceToNow } from 'date-fns';
+import { PageContainer } from '@/components/PageContainer';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -79,85 +80,85 @@ const Dashboard = () => {
   });
   
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Dashboard"
-        description="Overview of your SimGuardian activity and security status"
-        icon={<Activity />}
-      />
+    <PageContainer>
+      <div className="space-y-6">
+        <PageHeader
+          title="Dashboard"
+          description="Overview of your SimGuardian activity and security status"
+          icon={<Activity />}
+        />
       
-      {/* Key Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <DashboardCard className="p-4 flex items-center">
-          <div className="p-3 rounded-full bg-primary/10 mr-4">
-            <Smartphone className="h-6 w-6 text-primary" />
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Protected Devices</p>
-            <h3 className="text-2xl font-semibold">{devices.length}</h3>
-          </div>
-        </DashboardCard>
-        
-        <DashboardCard className="p-4 flex items-center">
-          <div className="p-3 rounded-full bg-amber-500/10 mr-4">
-            <AlertTriangle className="h-6 w-6 text-amber-500" />
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Recent Alerts</p>
-            <h3 className="text-2xl font-semibold">{alerts.length}</h3>
-          </div>
-        </DashboardCard>
-        
-        <DashboardCard className="p-4 flex items-center">
-          <div className="p-3 rounded-full bg-info/10 mr-4">
-            <Clock className="h-6 w-6 text-info" />
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Last Login</p>
-            <h3 className="text-sm font-semibold">
-              {lastLogin 
-                ? formatDistanceToNow(new Date(lastLogin.created_at), { addSuffix: true }) 
-                : 'N/A'}
-            </h3>
-          </div>
-        </DashboardCard>
-        
-        <DashboardCard className="p-4 flex items-center">
-          <div className="p-3 rounded-full bg-success/10 mr-4">
-            <Shield className="h-6 w-6 text-success" />
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Security Status</p>
-            <h3 className="text-2xl font-semibold">
-              {alerts.length > 0 ? 'Attention Needed' : 'Good'}
-            </h3>
-          </div>
-        </DashboardCard>
-      </div>
+        {/* Key Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <DashboardCard className="p-4 flex items-center">
+            <div className="p-3 rounded-full bg-primary/10 mr-4">
+              <Smartphone className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Protected Devices</p>
+              <h3 className="text-2xl font-semibold">{devices.length}</h3>
+            </div>
+          </DashboardCard>
       
-      {/* Activity Chart & Logs */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Account Activity</CardTitle>
-            <CardDescription>Your activity over the last 30 days</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ActivityChart data={activityLogs} />
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Your most recent actions</CardDescription>
-          </CardHeader>
-          <CardContent className="p-0">
-            <RecentActivityList />
-          </CardContent>
-        </Card>
+          <DashboardCard className="p-4 flex items-center">
+            <div className="p-3 rounded-full bg-amber-500/10 mr-4">
+              <AlertTriangle className="h-6 w-6 text-amber-500" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Recent Alerts</p>
+              <h3 className="text-2xl font-semibold">{alerts.length}</h3>
+            </div>
+          </DashboardCard>
+      
+          <DashboardCard className="p-4 flex items-center">
+            <div className="p-3 rounded-full bg-info/10 mr-4">
+              <Clock className="h-6 w-6 text-info" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Last Login</p>
+              <h3 className="text-sm font-semibold">
+              {formatDistanceToNow(new Date(), { addSuffix: true })}
+              </h3>
+            </div>
+          </DashboardCard>
+      
+          <DashboardCard className="p-4 flex items-center">
+            <div className="p-3 rounded-full bg-success/10 mr-4">
+              <Shield className="h-6 w-6 text-success" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Security Status</p>
+              <h3 className="text-2xl font-semibold">
+                {alerts.length > 0 ? 'Attention Needed' : 'Good'}
+              </h3>
+            </div>
+          </DashboardCard>
+        </div>
+      
+        {/* Activity Chart & Logs */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle>Account Activity</CardTitle>
+              <CardDescription>Your activity over the last 30 days</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ActivityChart data={activityLogs} />
+            </CardContent>
+          </Card>
+      
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Activity</CardTitle>
+              <CardDescription>Your most recent actions</CardDescription>
+            </CardHeader>
+            <CardContent className="p-0">
+              <RecentActivityList />
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

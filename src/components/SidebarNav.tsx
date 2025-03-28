@@ -59,12 +59,6 @@ const SidebarNav = () => {
       badge: <Badge variant="outline" className="ml-auto bg-destructive/10 text-destructive hover:bg-destructive/20">2</Badge>
     },
     {
-      icon: <ClipboardList className="h-5 w-5" />,
-      label: 'Activity Logs',
-      path: '/activity-logs',
-      active: isActive('/activity-logs')
-    },
-    {
       icon: <BellRing className="h-5 w-5" />,
       label: 'Notifications',
       path: '/notifications',

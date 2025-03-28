@@ -8,12 +8,13 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useNotifications } from '@/contexts/NotificationsContext';
 import { formatDistance } from 'date-fns';
+import { PageContainer } from '@/components/PageContainer';
 
 // Components for notification settings
 const NotificationPreferences = () => {
-  const [emailEnabled, setEmailEnabled] = useState(true);
+  const [emailEnabled, setEmailEnabled] = useState(false);
   const [pushEnabled, setPushEnabled] = useState(true);
-  const [smsEnabled, setSmsEnabled] = useState(false);
+  const [smsEnabled, setSmsEnabled] = useState(true);
 
   return (
     <div className="space-y-6">
@@ -123,45 +124,46 @@ const NotificationHistory = () => {
 
 const Notifications = () => {
   return (
-    <div className="space-y-6">
-      <PageHeader 
-        title="Notifications" 
-        icon={<Bell className="h-6 w-6" />}
-      />
-
-      <Tabs defaultValue="history">
-        <TabsList className="grid w-full grid-cols-2 mb-6">
-          <TabsTrigger value="history">Notification History</TabsTrigger>
-          <TabsTrigger value="preferences">Notification Preferences</TabsTrigger>
-        </TabsList>
-        <TabsContent value="history">
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Notifications</CardTitle>
-              <CardDescription>
-                View and manage your recent notifications
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <NotificationHistory />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="preferences">
-          <Card>
-            <CardHeader>
-              <CardTitle>Notification Preferences</CardTitle>
-              <CardDescription>
-                Manage how you receive notifications
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <NotificationPreferences />
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+    <PageContainer>
+      <div className="space-y-6">
+        <PageHeader
+          title="Notifications"
+          icon={<Bell className="h-6 w-6" />}
+        />
+        <Tabs defaultValue="history">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="history">Notification History</TabsTrigger>
+            <TabsTrigger value="preferences">Notification Preferences</TabsTrigger>
+          </TabsList>
+          <TabsContent value="history">
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Notifications</CardTitle>
+                <CardDescription>
+                  View and manage your recent notifications
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <NotificationHistory />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="preferences">
+            <Card>
+              <CardHeader>
+                <CardTitle>Notification Preferences</CardTitle>
+                <CardDescription>
+                  Manage how you receive notifications
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <NotificationPreferences />
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </PageContainer>
   );
 };
 
