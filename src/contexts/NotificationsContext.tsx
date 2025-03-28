@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -32,24 +31,47 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   useEffect(() => {
     const fetchNotifications = async () => {
       const { data: user } = await supabase.auth.getUser();
-      
+
       if (user?.user) {
         const { data, error } = await supabase
           .from('notifications')
           .select('*')
           .eq('user_id', user.user.id)
           .order('created_at', { ascending: false });
-        
+
         if (error) {
           console.error('Error fetching notifications:', error);
           return;
         }
-        
+
         if (data) {
-          // Type assertion to make TypeScript happy
           const typedData = data as Notification[];
-          setNotifications(typedData);
-          setUnreadCount(typedData.filter(note => !note.is_read).length);
+          setNotifications([
+            {
+              id: 'demo-notification',
+              user_id: user.user.id,
+              title: 'Welcome to SimGuardian!',
+              message: `Hey ${user.user.user_metadata.fullName}, welcome to SimGuardian! Your account is now active, and you're officially in control of your mobile security. Stay protected, stay alert, and take charge of your SIM safety today!`,
+              type: 'info',
+              related_to: 'welcome',
+              related_id: null,
+              is_read: false,
+              created_at: new Date().toISOString(),
+            },
+            {
+              id: 'scam-report-notification',
+              user_id: user.user.id,
+              title: 'Scam Report Received',
+              message: `Hello, we have received your scam report. Thank you for helping make our community safer. Your report is under review.`,
+              type: 'info',
+              related_to: 'scam-report',
+              related_id: null,
+              is_read: false,
+              created_at: new Date().toISOString(),
+            },
+            ...typedData,
+          ]);
+          setUnreadCount(typedData.filter(note => !note.is_read).length + 2);
         }
       }
     };
@@ -62,7 +84,7 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
       .on('postgres_changes', {
         event: 'INSERT',
         schema: 'public',
-        table: 'notifications'
+        table: 'notifications',
       }, (payload) => {
         const newNotification = payload.new as Notification;
         setNotifications(currentNotifications => [newNotification, ...currentNotifications]);
