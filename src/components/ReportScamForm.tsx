@@ -14,6 +14,8 @@ import {
 import { MapPin, Upload, AlertTriangle } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
+import { sendSMS } from '@/utils/sendSMS';
+
 const scamTypes = [
   { id: 'sim_swap', label: 'SIM Swap' },
   { id: 'phishing', label: 'Phishing' },
@@ -26,10 +28,16 @@ const scamTypes = [
 const ReportScamForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationShared, setLocationShared] = useState(false);
+  const [sharedLocation, setSharedLocation] = useState('');
+  const [phone, setPhone] = useState('');
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    // Send SMS to the provided phone number
+    const message = `Hello, we have received your scam report. Thank you for helping make our community safer. Your report is under review.`;
+    const smsResponse = await sendSMS(phone, message);
     
     // Simulate form submission
     setTimeout(() => {
@@ -45,6 +53,10 @@ const ReportScamForm = () => {
   const handleShareLocation = () => {
     if (navigator.geolocation) {
       setLocationShared(true);
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        setSharedLocation(`${latitude}, ${longitude}`);
+      });
       toast({
         title: "Location shared",
         description: "Your current location has been attached to the report.",
@@ -64,7 +76,14 @@ const ReportScamForm = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="space-y-2">
           <Label htmlFor="phone">Phone Number</Label>
-          <Input id="phone" type="tel" placeholder="+254 734 456789" required />
+          <Input 
+          id="phone" 
+          type="tel" 
+          placeholder="+254 734 456789" 
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required
+           />
         </div>
         
         <div className="space-y-2">
@@ -110,6 +129,7 @@ const ReportScamForm = () => {
               id="location" 
               type="text" 
               placeholder="Enter location or auto-detect" 
+              value={sharedLocation}
               disabled={locationShared}
               className="flex-1"
             />
