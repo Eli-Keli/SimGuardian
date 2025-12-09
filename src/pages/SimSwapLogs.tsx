@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Calendar, Download, Search, Shield, Flag } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -16,6 +16,7 @@ import ActionPanel from '@/components/ActionPanel';
 import LogsAnalytics from '@/components/LogsAnalytics';
 import { PageContainer } from '@/components/PageContainer';
 import { PageHeader } from '@/components/PageHeader';
+import { Link } from 'react-router-dom';
 
 const SimSwapLogs = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,7 +26,7 @@ const SimSwapLogs = () => {
 
   return (
     <PageContainer>
-      <PageHeader 
+      <PageHeader
         title="SIM Swap Logs"
         description="View and analyze all SIM swap activity across your network"
         icon={<Shield size={20} className="text-primary" />}
@@ -41,7 +42,9 @@ const SimSwapLogs = () => {
             </Button>
             <Button variant="destructive" className="flex items-center gap-2">
               <Flag size={18} />
-              <span>Report New SIM Swap Fraud</span>
+              <Link to="/report-scam">
+                <span>Report New SIM Swap Fraud</span>
+              </Link>
             </Button>
           </div>
         </DashboardCard>
@@ -60,15 +63,15 @@ const SimSwapLogs = () => {
               <label className="text-sm font-medium mb-2 block">Search Phone Number</label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input 
-                  className="pl-9" 
-                  placeholder="Search by phone number" 
+                <Input
+                  className="pl-9"
+                  placeholder="Search by phone number"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-1">
               <div>
                 <label className="text-sm font-medium mb-2 block">Date Range</label>
@@ -84,7 +87,7 @@ const SimSwapLogs = () => {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium mb-2 block">Status</label>
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -99,7 +102,7 @@ const SimSwapLogs = () => {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium mb-2 block">Location</label>
                 <Select value={locationFilter} onValueChange={setLocationFilter}>
@@ -119,7 +122,7 @@ const SimSwapLogs = () => {
                 </Select>
               </div>
             </div>
-            
+
             <Button variant="secondary" className="flex items-center gap-2">
               <Download size={16} />
               <span>Export Logs</span>
@@ -130,7 +133,7 @@ const SimSwapLogs = () => {
 
       {/* Logs Table */}
       <DashboardCard padding="md" className="mb-6">
-        <LogsTable 
+        <LogsTable
           searchQuery={searchQuery}
           dateRange={dateRange}
           statusFilter={statusFilter}
